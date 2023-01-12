@@ -1,0 +1,87 @@
+body {
+    background: lightblue;
+    user-select: none;
+}
+
+#wrapper {
+    position: absolute;
+}
+
+#gamecontainer {
+    width: 1500px;
+    height: 1000px;
+    background-image:   url("resources/icons/splashscreen.png");
+    background-position: center bottom, left top;
+    background-repeat: no-repeat;
+}
+
+.gamelayer {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: none;
+}
+
+#gamestartscreen {
+    padding-top: 250px;
+    text-align: center;
+}
+
+#gamestartscreen img {
+    margin: 10px;
+    height: 120px;
+    width: 120px;
+    cursor: grab;
+}
+
+#levelselectscreen {
+    padding-top: 150px;
+    padding-left: 50px;
+}
+
+#levelselectscreen input {
+    margin: 20px;
+    cursor: pointer;
+    background: url("resources/icons/next.png") no-repeat;
+    color: yellow;
+    font-size: 20px;
+    width: 64px;
+    height: 64px;
+    border: 0;
+    outline: 0;
+}
+
+#loadingscreen {
+    background: rgba(100, 100, 100, 0.5);
+}
+
+#loadingmessage {
+    margin-top: 400px;
+    text-align: center;
+    height: 48px;
+    color: white;
+    background: url("resources/icons/loader.gif") no-repeat center;
+    font: 12px Arial;
+}
+
+#scorescreen {
+    height: 60px;
+    font: 32px "Comic Sans MS";
+    text-shadow: 0 0 2px black;
+    color: white;
+}
+
+#scorescreen img {
+    opacity: 0.6;
+    top: 5%;
+    left: 5%;
+    position: relative;
+    padding: 8px;
+    cursor: pointer;
+}
+
+#score {
+    position: absolute;
+    top: 5%;
+    right:5%;
+}

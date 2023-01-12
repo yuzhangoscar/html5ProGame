@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="app.js" defer></script>
+    <link rel="stylesheet" href="styles.css" type="text/css" media="screen">
+    <title>roguelike</title>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="gamecontainer">
+            <canvas width="640" height="480" id="gamecanvas" class="gamelayer">
+            </canvas>
+
+            <div id="scorescreen" class="gamelayer">
+                <img id="togglemusic" src="resources/icons/sound.png" alt="Toggle Music">
+                <img src="resources/icons/prev.png" alt="Restart Level">
+                <span id="score">Score: 0</span>
+            </div>
+
+            <div id="gamestartscreen" class="gamelayer">
+                <img src="resources/icons/play.png" alt="Play Game" id="playgame"><br>
+                <img src="resources/icons/settings.png" alt="Settings">
+            </div>
+
+            <div id="levelselectscreen" class="gamelayer">
+            </div>
+
+            <div id="loadingscreen" class="gamelayer">
+                <div id="loadingmessage"></div>
+            </div>
+
+            <div id="endingscreen" class="gamelayer">
+                <div>
+                    <p id="endingmessage">The level is over</p>
+                    <p id="playcurrentlevel" class="endingoption">
+                        <img src="resources/icons/prev.png" alt="Replay">
+                        Replay Current Level
+                    </p>
+                    <p id="playnextlevel" class="endingoption">
+                        <img src="resources/icons/next.png" alt="Next">
+                        Play Next Level
+                    </p>
+                    <p id="returntolevelscreen" class="endingpoint">
+                        <img src="resources/icons/return.png" alt="Return">
+                        Return to Level Screen
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
