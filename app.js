@@ -98,9 +98,23 @@ const game = {
         game.context.drawImage(game.currentLevel.backgroundImage, game.offsetLeft / 4, 0, game.canvas.width, game.canvas.height, 0, 0, game.canvas.width, game.canvas.height);
         game.context.drawImage(game.currentLevel.foregroundImage, game.offsetLeft, 0, game.canvas.width, game.canvas.height, 0, 0, game.canvas.width, game.canvas.height);
         game.context.drawImage(game.slingshotImage, game.slightshotX - game.offsetLeft, game.slightshotY);
+        game.drawAllBodies();
         game.context.drawImage(game.slingshotFrontImage, game.slightshotX - game.offsetLeft, game.slightshotY);
         if (!game.ended) {
             game.animationFrame= window.requestAnimationFrame(game.animate, game.canvas);
+        }
+    },
+    drawAllBodies: function() {
+        // Draw debug data if a debug canvas has been set up
+        if (box2d.debugCanvas) {
+            box2d.world.DrawDebugData();
+        }
+        // Iterate through all the bodies and draw them on the game canvas
+        for (let body = box2d.world.GetBodyList(); body; body = body.GetNext()) {
+            let entity = body.GetUserData();
+            if (entity) {
+                entities.draw(entity, body.GetPosition(), body.GetAngle());
+            }
         }
     }
 }
@@ -109,11 +123,47 @@ const levels = {
     data: [{
         foreground: "desert-foreground",
         background: "clouds-background",
-        entities:[]
+        entities:[
+            // The ground
+            { type: "ground", name: "dirt", x: 500, y: 440, width: 1000, height: 20,
+            isStatic: true },
+            // The slingshot wooden frame
+            { type: "ground", name: "wood", x: 190, y: 390, width: 30, height: 80,
+            isStatic: true },
+            { type: "block", name: "wood", x: 500, y: 380, angle: 90, width: 100, height: 25 },
+            { type: "block", name: "glass", x: 500, y: 280, angle: 90, width: 100, height: 25 },
+            { type: "villain", name: "burger", x: 500, y: 205, calories: 590 },
+            { type: "block", name: "wood", x: 800, y: 380, angle: 90, width: 100, height: 25 },
+            { type: "block", name: "glass", x: 800, y: 280, angle: 90, width: 100, height: 25 },
+            { type: "villain", name: "fries", x: 800, y: 205, calories: 420 },
+            { type: "hero", name: "orange", x: 80, y: 405 },
+            { type: "hero", name: "apple", x: 140, y: 405 }
+        ]
     }, {
         foreground: "desert-foreground",
         background: "clouds-background",
-        entities:[]
+        entities:[
+            // The ground
+            { type: "ground", name: "dirt", x: 500, y: 440, width: 1000, height: 20,
+            isStatic: true },
+            // The slingshot wooden frame
+            { type: "ground", name: "wood", x: 190, y: 390, width: 30, height: 80,
+            isStatic: true },
+            { type: "block", name: "wood", x: 850, y: 380, angle: 90, width: 100, height: 25 },
+            { type: "block", name: "wood", x: 700, y: 380, angle: 90, width: 100, height: 25 },
+            { type: "block", name: "wood", x: 550, y: 380, angle: 90, width: 100, height: 25 },
+            { type: "block", name: "glass", x: 625, y: 316, width: 150, height: 25 },
+            { type: "block", name: "glass", x: 775, y: 316, width: 150, height: 25 },
+            { type: "block", name: "glass", x: 625, y: 252, angle: 90, width: 100, height: 25 },
+            { type: "block", name: "glass", x: 775, y: 252, angle: 90, width: 100, height: 25 },
+            { type: "block", name: "wood", x: 700, y: 190, width: 150, height: 25 },
+            { type: "villain", name: "burger", x: 700, y: 152, calories: 590 },
+            { type: "villain", name: "fries", x: 625, y: 405, calories: 420 },
+            { type: "villain", name: "sodacan", x: 775, y: 400, calories: 150 },
+            { type: "hero", name: "strawberry", x: 30, y: 415 },
+            { type: "hero", name: "orange", x: 80, y: 405 },
+            { type: "hero", name: "apple", x: 140, y: 405 }
+        ]
     }],
     init: function() {
         const levelSelectScreen = document.querySelector('#levelselectscreen');
@@ -132,6 +182,8 @@ const levels = {
         }
     },
     load: function(number) {
+        box2d.init();
+
         game.currentLevel={number:number};
         game.score=0;
 
