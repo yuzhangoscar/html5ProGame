@@ -233,9 +233,9 @@ const entities = {
                 break;
             case "ground":
             // Do nothing... We draw objects like the ground & slingshot separately
-            break;
-            }
-            game.context.rotate(-angle);
-            game.context.translate(-position.x * box2d.scale + game.offsetLeft, -position.y * box2d.scale);
+                break;
+        }
+        game.context.rotate(-angle);
+        game.context.translate(-position.x * box2d.scale + game.offsetLeft, -position.y * box2d.scale);
     }
 }
