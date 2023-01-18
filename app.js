@@ -1,9 +1,9 @@
 const game = {
     mode: "intro",
-    slightshotX: 140,
-    slightshotY: 280,
-    slightshotBandX: 140+55,
-    slightshotBandY: 280+23,
+    slingshotX: 140,
+    slingshotY: 280,
+    slingshotBandX: 140+55,
+    slingshotBandY: 280+23,
     ended: false,
     score: 0,
     offsetLeft: 0,
@@ -122,6 +122,8 @@ const game = {
                 let minDragDistance = 10;
                 let maxDragDistance = 120;
                 let maxAngle = Math.PI * 145 / 180;
+                console.log(`mouse.x is ${mouse.x}, gameslingshotBandX is ${game.slingshotBandX}, game.offsetLeft is ${game.offsetLeft}, mouse.y is ${mouse.y}, game.slinghostBandY is ${game.slingshotBandY}`);
+                console.log(`distance is: ${distance}, angel is: ${angle}, minDragDistance is ${minDragDistance}, maxDragDistance is ${maxDragDistance}, maxAngle is ${maxAngle}`);
                 if (angle > 0 && angle < maxAngle ) {
                     angle = maxAngle;
                 }
@@ -138,7 +140,7 @@ const game = {
                     angle = Math.PI;
                 }
                 // Position the hero based on the distance and angle calculated earlier
-                    game.currentHero.SetPosition({ x: (game.slingshotBandX + distance * Math.cos(angle) + game.offsetLeft) / box2d.scale, y: (game.slingshotBandY + distance * Math.sin(angle)) / box2d.scale });
+                game.currentHero.SetPosition({ x: (game.slingshotBandX + distance * Math.cos(angle) + game.offsetLeft) / box2d.scale, y: (game.slingshotBandY + distance * Math.sin(angle)) / box2d.scale });
             } else {
                 console.log('fired');
                 game.mode = "fired";
@@ -220,9 +222,9 @@ const game = {
         game.handleGameLogic();
         game.context.drawImage(game.currentLevel.backgroundImage, game.offsetLeft / 4, 0, game.canvas.width, game.canvas.height, 0, 0, game.canvas.width, game.canvas.height);
         game.context.drawImage(game.currentLevel.foregroundImage, game.offsetLeft, 0, game.canvas.width, game.canvas.height, 0, 0, game.canvas.width, game.canvas.height);
-        game.context.drawImage(game.slingshotImage, game.slightshotX - game.offsetLeft, game.slightshotY);
+        game.context.drawImage(game.slingshotImage, game.slingshotX - game.offsetLeft, game.slingshotY);
         game.drawAllBodies();
-        game.context.drawImage(game.slingshotFrontImage, game.slightshotX - game.offsetLeft, game.slightshotY);
+        game.context.drawImage(game.slingshotFrontImage, game.slingshotX - game.offsetLeft, game.slingshotY);
         if (!game.ended) {
             game.animationFrame= window.requestAnimationFrame(game.animate, game.canvas);
         }
