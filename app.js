@@ -108,48 +108,52 @@ const game = {
                     game.mode = "wait-for-firing";
                 }
             }
-            if (game.mode === "firing") {
-                // If the mouse button is down, allow the hero to be dragged around and aimed
-                // If not, fire the hero into the air
-                if (mouse.down) {
-                    game.panTo(game.slingshotX);
-                    // Limit dragging to maxDragDistance
-                    let distance = Math.pow(Math.pow(mouse.x - game.slingshotBandX + game.offsetLeft, 2) + Math.pow(mouse.y - game.slingshotBandY, 2), 0.5);
-                    let angle = Math.atan2(mouse.y - game.slingshotBandY, mouse.x - game.slingshotBandX);
-                    let minDragDistance = 10;
-                    let maxDragDistance = 120;
-                    let maxAngle = Math.PI * 145 / 180;
-                    if (angle > 0 && angle < maxAngle ) {
-                        angle = maxAngle;
-                    }
-                    if (angle < 0 && angle > -maxAngle ) {
-                        angle = -maxAngle;
-                    }
-                    // If hero has been dragged too far, limit movement
-                    if (distance > maxDragDistance) {
-                        distance = maxDragDistance;
-                    }
-                    // If the hero has been dragged in the wrong direction, limit movement
-                    if ((mouse.x + game.offsetLeft > game.slingshotBandX)) {
-                        distance = minDragDistance;
-                        angle = Math.PI;
-                    }
-                    // Position the hero based on the distance and angle calculated earlier
-                        game.currentHero.SetPosition({ x: (game.slingshotBandX + distance * Math.cos(angle) + game.offsetLeft) / box2d.scale, y: (game.slingshotBandY + distance * Math.sin(angle)) / box2d.scale });
-                } else {
-                        game.mode = "fired";
-                        let impulseScaleFactor = 0.8;
-                        let heroPosition = game.currentHero.GetPosition();
-                        let heroPositionX = heroPosition.x * box2d.scale;
-                        let heroPositionY = heroPosition.y * box2d.scale;
-                        let impulse = new b2Vec2((game.slingshotBandX - heroPositionX) * impulseScaleFactor,(game.slingshotBandY - heroPositionY) * impulseScaleFactor);
-                        // Apply an impulse to the hero to fire it towards the target
-                        game.currentHero.ApplyImpulse(impulse, game.currentHero.GetWorldCenter());
-                        // Make sure the hero can't keep rolling indefinitely
-                        game.currentHero.SetAngularDamping(2);
+        }
+        if (game.mode === "firing") {
+            // If the mouse button is down, allow the hero to be dragged around and aimed
+            // If not, fire the hero into the air
+            console.log('firing mode');
+            if (mouse.down) {
+                console.log(`mouse down and firing`);
+                game.panTo(game.slingshotX);
+                // Limit dragging to maxDragDistance
+                let distance = Math.pow(Math.pow(mouse.x - game.slingshotBandX + game.offsetLeft, 2) + Math.pow(mouse.y - game.slingshotBandY, 2), 0.5);
+                let angle = Math.atan2(mouse.y - game.slingshotBandY, mouse.x - game.slingshotBandX);
+                let minDragDistance = 10;
+                let maxDragDistance = 120;
+                let maxAngle = Math.PI * 145 / 180;
+                if (angle > 0 && angle < maxAngle ) {
+                    angle = maxAngle;
                 }
+                if (angle < 0 && angle > -maxAngle ) {
+                    angle = -maxAngle;
+                }
+                // If hero has been dragged too far, limit movement
+                if (distance > maxDragDistance) {
+                    distance = maxDragDistance;
+                }
+                // If the hero has been dragged in the wrong direction, limit movement
+                if ((mouse.x + game.offsetLeft > game.slingshotBandX)) {
+                    distance = minDragDistance;
+                    angle = Math.PI;
+                }
+                // Position the hero based on the distance and angle calculated earlier
+                    game.currentHero.SetPosition({ x: (game.slingshotBandX + distance * Math.cos(angle) + game.offsetLeft) / box2d.scale, y: (game.slingshotBandY + distance * Math.sin(angle)) / box2d.scale });
+            } else {
+                console.log('fired');
+                game.mode = "fired";
+                let impulseScaleFactor = 0.8;
+                let heroPosition = game.currentHero.GetPosition();
+                let heroPositionX = heroPosition.x * box2d.scale;
+                let heroPositionY = heroPosition.y * box2d.scale;
+                let impulse = new b2Vec2((game.slingshotBandX - heroPositionX) * impulseScaleFactor,(game.slingshotBandY - heroPositionY) * impulseScaleFactor);
+                // Apply an impulse to the hero to fire it towards the target
+                game.currentHero.ApplyImpulse(impulse, game.currentHero.GetWorldCenter());
+                // Make sure the hero can't keep rolling indefinitely
+                game.currentHero.SetAngularDamping(2);
             }
         }
+
         if (game.mode === "fired") {
             // Pan to the location of the current hero as it flies
             // Wait till the hero stops moving or is out of bounds
@@ -164,10 +168,6 @@ const game = {
                 game.currentHero = undefined;
                 // and load next hero
                 game.mode = "load-next-hero";
-            }
-            if (game.mode === "level-success" || game.mode === "level-failure") {
-            // First pan all the way back to the left
-            // Then show the game has ended and show the ending screen
             }
         }
     },
@@ -250,7 +250,6 @@ const game = {
         // Radius of the hero
         let radiusSquared = Math.pow(game.currentHero.GetUserData().radius, 2);
         // If the distance of mouse from the center is less than the radius, mouse is on the hero
-        console.log(`on the hero, its reulst is: ${distanceSquared}, ${radiusSquared}`);
         return (distanceSquared <= radiusSquared);
     }
 }
@@ -411,7 +410,6 @@ const mouse = {
     },
     mousedownhandler: function(ev) {
         mouse.down = true;
-        console.log(game.mode);
 
         ev.preventDefault();
     },
