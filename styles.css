@@ -8,11 +8,9 @@ body {
 }
 
 #gamecontainer {
-    width: 1500px;
-    height: 1000px;
+    width: 640px;
+    height: 480px;
     background-image:   url("resources/icons/splashscreen.png");
-    background-position: center bottom, left top;
-    background-repeat: no-repeat;
 }
 
 .gamelayer {
@@ -29,9 +27,7 @@ body {
 
 #gamestartscreen img {
     margin: 10px;
-    height: 120px;
-    width: 120px;
-    cursor: grab;
+    cursor: pointer;
 }
 
 #levelselectscreen {
@@ -42,7 +38,7 @@ body {
 #levelselectscreen input {
     margin: 20px;
     cursor: pointer;
-    background: url("resources/icons/next.png") no-repeat;
+    background: url("resources/icons/level.png") no-repeat;
     color: yellow;
     font-size: 20px;
     width: 64px;
