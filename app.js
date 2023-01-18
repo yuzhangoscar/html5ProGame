@@ -8,6 +8,8 @@ const game = {
     score: 0,
     offsetLeft: 0,
     maxSpeed: 3,
+    heroes: undefined,
+    villains: undefined,
     init: function() {
         const playgameButton = document.querySelector('#playgame');
         playgameButton.addEventListener('click', () => {
@@ -39,6 +41,20 @@ const game = {
         game.hideScreens();
         game.showScreen('levelselectscreen');
     },
+    countHeroesAndVillains: function() {
+        game.heroes = [];
+        game.villains = [];
+        for (let body = box2d.world.GetBodyList(); body; body = body.GetNext()) {
+            let entity = body.GetUserData();
+            if (entity) {
+                if (entity.type === "hero") {
+                    game.heroes.push(body);
+                } else if (entity.type === "villain") {
+                    game.villains.push(body);
+                }
+            }
+        }
+    },
     handleGameLogic: function() {
         if (game.mode === "intro") {
             if(game.panTo(700)) {
@@ -52,8 +68,52 @@ const game = {
                 game.panTo(game.slightshotX);
             }
         }
-        if(game.mode === "load-next-hero") {
-            game.mode = "wait-for-firing";
+        if (game.mode === "load-next-hero") {
+            // First count the heroes and villains and populate their respective arrays
+            game.countHeroesAndVillains();
+            // Check if any villains are alive, if not, end the level (success)
+            if (game.villains.length === 0) {
+                game.mode = "level-success";
+                return;
+            }
+            // Check if there are any more heroes left to load, if not end the level (failure)
+            if (game.heroes.length === 0) {
+                game.mode = "level-failure";
+                return;
+            }
+            // Load the hero and set mode to wait-for-firing
+            if (!game.currentHero) {
+            // Select the last hero in the heroes array
+                game.currentHero = game.heroes[game.heroes.length - 1];
+                // Starting position for loading the hero
+                var heroStartX = 180;
+                var heroStartY = 180;
+                // And position it in mid-air, slightly above the slingshot
+                game.currentHero.SetPosition({ x: heroStartX / box2d.scale, y: heroStartY / box2d.scale });
+                game.currentHero.SetLinearVelocity({ x: 0, y: 0 });
+                game.currentHero.SetAngularVelocity(0);
+                // And since the hero had been sitting on the ground and is "asleep" in Box2D, "wake" it
+                game.currentHero.SetAwake(true);
+            } else {
+            // Wait for hero to stop bouncing on top of the slingshot and fall asleep
+            // and then switch to wait-for-firing
+                game.panTo(game.slingshotX);
+                if (!game.currentHero.IsAwake()) {
+                    game.mode = "wait-for-firing";
+                }
+            }
+            if (game.mode === "firing") {
+                // If the mouse button is down, allow the hero to be dragged around and aimed
+                // If not, fire the hero into the air
+            }
+            if (game.mode === "fired") {
+            // Pan to the location of the current hero as it flies
+            // Wait till the hero stops moving or is out of bounds
+            }
+            if (game.mode === "level-success" || game.mode === "level-failure") {
+            // First pan all the way back to the left
+            // Then show the game has ended and show the ending screen
+            }
         }
     },
     panTo: function(newCenter) {
@@ -94,6 +154,14 @@ const game = {
         game.animationFrame = window.requestAnimationFrame(game.animate, game.canvas);
     },
     animate: function() {
+        // Animate the characters
+        let currentTime = new Date().getTime();
+        if (game.lastUpdateTime) {
+        let timeStep = (currentTime - game.lastUpdateTime) / 1000;
+            box2d.step(timeStep);
+        }
+        game.lastUpdateTime = currentTime;
+
         game.handleGameLogic();
         game.context.drawImage(game.currentLevel.backgroundImage, game.offsetLeft / 4, 0, game.canvas.width, game.canvas.height, 0, 0, game.canvas.width, game.canvas.height);
         game.context.drawImage(game.currentLevel.foregroundImage, game.offsetLeft, 0, game.canvas.width, game.canvas.height, 0, 0, game.canvas.width, game.canvas.height);

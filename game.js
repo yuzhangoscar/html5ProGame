@@ -19,6 +19,18 @@ const box2d = {
         //this.setupDebugDraw();
     },
 
+    step: function(timeStep) {
+        // As per Box2D docs, if the timeStep is larger than 1 / 30,
+        // Box2D can start having problems with collision detection
+        // So cap timeStep at 1 / 30
+        if (timeStep > 1 / 30) {
+            timeStep = 1 / 30;
+        }
+        // velocity iterations = 8
+        // position iterations = 3
+        box2d.world.Step(timeStep, 8, 3);
+    },
+
     debugCanvas: undefined,
     setupDebugDraw: function() {
         // Dynamically create a canvas for the debug drawing
