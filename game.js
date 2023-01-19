@@ -11,6 +11,9 @@ let b2ContactListener = Box2D.Dynamics.b2ContactListener;
 
 const box2d = {
     scale: 30, 
+    timeStep: 1/30,
+    velocityIteration: 8,
+    positionIteration: 3,
     init: function() {
         let gravity = new b2Vec2(0, 9.8);
         const allowSleep = true;
@@ -23,12 +26,12 @@ const box2d = {
         // As per Box2D docs, if the timeStep is larger than 1 / 30,
         // Box2D can start having problems with collision detection
         // So cap timeStep at 1 / 30
-        if (timeStep > 1 / 30) {
-            timeStep = 1 / 30;
+        if (timeStep > this.timeStep) {
+            timeStep = this.timeStep;
         }
         // velocity iterations = 8
         // position iterations = 3
-        box2d.world.Step(timeStep, 8, 3);
+        box2d.world.Step(timeStep, this.velocityIteration, this.positionIteration);
     },
 
     debugCanvas: undefined,
