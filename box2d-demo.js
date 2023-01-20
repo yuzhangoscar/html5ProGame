@@ -14,7 +14,10 @@ const timeStep = 1 / 60;
 const velocityIterations = 8;
 const positionIterations = 3;
 let context;
-const radius = 1;
+const radius = 5;
+const interval = 200;
+const football = new Image();
+football.src = "resources/icons/football.png";
 
 function init() {
     let gravity = new b2Vec2(0, 9.8);
@@ -24,9 +27,12 @@ function init() {
     createFloor();
     createWall(5, 0, 2.15);
     createWall(645, 0, 0.99);
-    for (let index = 0; index < 100; index++) {
-        createCircularBody(150, 50, radius);
-    }
+    setInterval(() => {
+        console.log(`one sec`);
+        for (let index = 0; index < 5; index++) {
+            createCircularBody(150, 50, radius);
+        }
+    }, interval);
     setupDebugDraw();
     animate();
 }
@@ -84,6 +90,7 @@ function setupDebugDraw() {
 
     let debugDraw = new b2DebugDraw();
 
+    context.drawImage(football, 10, 10, radius, radius);
     debugDraw.SetSprite(context);
     debugDraw.SetDrawScale(scale);
     debugDraw.SetFillAlpha(0.3);
@@ -129,4 +136,8 @@ function createCircularBody(positionX, positionY, size) {
 
     let body = world.CreateBody(bodyDef);
     let fixture = body.CreateFixture(fixtureDef);
+
+    body.SetUserData({sprite: football});
+
+    return body;
 }
