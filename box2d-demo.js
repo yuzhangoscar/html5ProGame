@@ -14,7 +14,7 @@ const timeStep = 1 / 60;
 const velocityIterations = 8;
 const positionIterations = 3;
 let context;
-const radius = 5;
+const radius = 1;
 
 function init() {
     let gravity = new b2Vec2(0, 9.8);
@@ -22,11 +22,10 @@ function init() {
 
     world = new b2World(gravity, allowSleep);
     createFloor();
-    createWall(5, 0);
-    createWall(645, 0);
-    createRectangularBody();
-    for (let index = 0; index < 300; index++) {
-        createCircularBody(index+10, index+10, radius);
+    createWall(5, 0, 2.15);
+    createWall(645, 0, 0.99);
+    for (let index = 0; index < 100; index++) {
+        createCircularBody(150, 50, radius);
     }
     setupDebugDraw();
     animate();
@@ -39,12 +38,13 @@ function animate() {
     setTimeout(animate, timeStep);
 }
 
-function createWall(positionX, positionY) {
+function createWall(positionX, positionY, angle) {
     let bodyDef = new b2BodyDef;
 
     bodyDef.type = b2Body.b2_staticBody;
     bodyDef.position.x = positionX / scale;
     bodyDef.position.y = positionY / scale;
+    bodyDef.angle = angle;
 
     let fixtureDef = new b2FixtureDef;
 
@@ -53,7 +53,7 @@ function createWall(positionX, positionY) {
     fixtureDef.restitution = 0.2;
 
     fixtureDef.shape = new b2PolygonShape;
-    fixtureDef.shape.SetAsBox(10 / scale, 480 / scale);
+    fixtureDef.shape.SetAsBox(10 / scale, 300 / scale);
 
     let body = world.CreateBody(bodyDef);
     let fixture = body.CreateFixture(fixtureDef);
