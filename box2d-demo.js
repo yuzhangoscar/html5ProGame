@@ -14,12 +14,14 @@ const timeStep = 1 / 60;
 const velocityIterations = 8;
 const positionIterations = 3;
 let context;
-const radius = 20;
-const interval = 2000;
+const radius = 10;
+const interval = 5000;
 const football = new Image();
 football.src = "resources/icons/football.png";
+let total=0;
 
 function drawAllBodies() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
     for (let body = world.GetBodyList(); body; body = body.GetNext()) {
         let entity = body.GetUserData();
         if (entity) {
@@ -37,7 +39,7 @@ function init() {
     createWall(5, 0, 2.15);
     createWall(645, 0, 0.99);
     setInterval(() => {
-        for (let index = 0; index < 20; index++) {
+        for (let index = 0; index < 5; index++) {
             createCircularBody(150, 50, radius);
         }
     }, interval);
